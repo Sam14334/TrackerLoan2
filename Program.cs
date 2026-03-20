@@ -10,9 +10,10 @@ namespace TrackerLoan2
         static void Main(string[] args)
         {
             //Loan Tracking system for an Online banking app, with loan notification and penalties
-               
 
-            DataService.DataService dataService = new DataService.DataService();
+            //Interface     name            class that implements interface
+            IDataService dataService = new DataJson(); //json data saving
+            //DataService.DataService dataService= new DataService.DataService(); //in-memory data saving
             AppService.AppService appService = new AppService.AppService();
 
             short option;
@@ -29,12 +30,46 @@ namespace TrackerLoan2
 
                     string referenceInput = getReferenceInput(); 
 
-                    Account account = dataService.dummyAccounts.FirstOrDefault(a => a.accountReference == referenceInput);// if input matches any accountReference in dummyAccounts, it will return the first match, otherwise its null.
+                    Account account = dataService.getAccounts().FirstOrDefault(a => a.accountReference == referenceInput);// if input matches any accountReference in dummyAccounts, it will return the first match, otherwise its null.
 
                     processAccount(account);
                 } else if (option == 2)
                 {
-                    dataService.addAccount(new Account { accountReference = "123", amount = 2500, daysPassed = 21, duration = 100, interestRate = 12, penaltyRate = 6 });
+                    string accountReference;
+                    int daysPassed, duration, interestRate, penaltyRate;
+                    double amount = 1000;
+
+                    Console.WriteLine("============= Add Account =============");
+                    Console.Write("Reference ID: ");
+                    accountReference = Console.ReadLine();
+                    Console.Write("Amount (Php): ");
+                    amount = double.Parse(Console.ReadLine());
+                    Console.Write("DaysPassed since loan: ");
+                    daysPassed = int.Parse(Console.ReadLine());
+                    Console.Write("Duration of loan: ");
+                    duration = int.Parse(Console.ReadLine());
+                    Console.Write("Interest Rate (percentage): ");
+                    interestRate = int.Parse(Console.ReadLine());
+                    Console.Write("Penalty Rate (percentage): ");
+                    penaltyRate = int.Parse(Console.ReadLine());
+
+
+                    Account newAccount = new Account    
+                    {
+                        accountReference = accountReference,
+                        amount = amount,
+                        daysPassed = daysPassed,
+                        duration = duration,
+                        interestRate = interestRate,
+                        penaltyRate = penaltyRate,
+                    };
+
+                    if (dataService.addAccount(newAccount))
+                    {
+                        Console.WriteLine("Account Added!\n");
+                    }
+
+                  
                 } else if (option == 3)
                 {
                     break;
@@ -50,7 +85,12 @@ namespace TrackerLoan2
         {
             return amount * (penaltyRate/100.0);
         }
-        static void displayLoanInfo(double amount,int daysPassed, int duration, double interestRate, double penaltyValue, double penaltyRate)
+
+        static double calculateTotalAmount(double amount, double penaltyValue)
+        {
+            return amount + penaltyValue;
+        }
+        static void displayLoanInfo(double amount,int daysPassed, int duration, double interestRate,  double penaltyRate, double penaltyValue, double totalAmount)
         {
             
             Console.WriteLine("============= Loan Status ============="); 
@@ -59,30 +99,63 @@ namespace TrackerLoan2
             Console.WriteLine($"Days Passed Since loan:  {daysPassed} days"); 
             Console.WriteLine($"Interest Rate: {interestRate}%");
             Console.WriteLine($"Penalty Rate: {penaltyRate}%");
-            Console.WriteLine($"Due Date Penalty:  {penaltyValue} Php\n");
+            Console.WriteLine($"Due Date Penalty:  {penaltyValue} Php");
+            Console.WriteLine($"Total amount to be paid:  {totalAmount} Php\n");
         }
         static string getReferenceInput()
         {
-            Console.Write("Enter a reference id:");
+            Console.Write("Enter your reference id:");
             string referenceInput = Console.ReadLine();
             return referenceInput;
         }
         static void processAccount(Account account)
         {
             double penaltyValue = 0;
+            double totalAmount = 0;
             if (account != null)
             {
-                penaltyValue = calculatePenaltyValue(account.amount, account.penaltyRate);
-                displayLoanInfo(account.amount, account.daysPassed, account.duration, account.interestRate, penaltyValue, account.penaltyRate);
+                 
+                
 
-                if (account.daysPassed > account.duration)
+                int overdueDays = account.daysPassed - account.duration;
+
+                // ✅ Only calculate penalty if overdue
+                if (overdueDays > 0)
                 {
-                    Console.WriteLine($"Loan is overdue by {account.daysPassed - account.duration} day/s.\nPenalty applied: {penaltyValue} Php");
+                    penaltyValue = calculatePenaltyValue(account.amount, account.penaltyRate) * overdueDays;
                 }
-                else if (account.daysPassed >= (account.duration - 5))
+                else
                 {
+                    penaltyValue = 0;
+                }
+
+                totalAmount = calculateTotalAmount(account.amount, penaltyValue);
+
+                if (account.daysPassed >= (account.duration - 5) && account.daysPassed < account.duration)
+                {
+                    displayLoanInfo(account.amount, account.daysPassed, account.duration, account.interestRate, account.penaltyRate, penaltyValue, totalAmount);
                     Console.WriteLine("Your loan is almost due, please settle it immediately.\n");
                 }
+                else if (account.daysPassed == account.duration)
+                {
+                    displayLoanInfo(account.amount, account.daysPassed, account.duration, account.interestRate, account.penaltyRate, penaltyValue, totalAmount);
+                    Console.WriteLine("Your loan is due today. Please settle it now.\n");
+                }
+                else if (account.daysPassed > account.duration)
+                {
+                    displayLoanInfo(account.amount, account.daysPassed, account.duration, account.interestRate, account.penaltyRate, penaltyValue, totalAmount);
+                    Console.WriteLine($"Loan is overdue by {overdueDays} day/s.\nPenalty applied: {penaltyValue} Php");
+                }
+                else
+                {
+                    displayLoanInfo(account.amount, account.daysPassed, account.duration, account.interestRate, account.penaltyRate, penaltyValue, totalAmount);
+                    Console.WriteLine($"Your loan is not due yet");
+                }
+
+
+
+
+
             }
             else
             {
