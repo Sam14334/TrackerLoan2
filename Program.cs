@@ -1,7 +1,7 @@
 ﻿using DataService;
 using Models;
-using AppService;
 using System.Linq;
+using System.Security.Principal;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace TrackerLoan2
 {
@@ -17,23 +17,26 @@ namespace TrackerLoan2
             AppService.AppService appService = new AppService.AppService();
 
             short option;
-            do {
+            do
+            {
                 Console.WriteLine("============= Loan Tracker =============");
                 Console.WriteLine("Select a number for your desired action");
                 Console.WriteLine("[1] Track Loan");
                 Console.WriteLine("[2] Add Account (for testing)");
                 Console.WriteLine("[3] Exit\n");
 
-                option = Convert.ToInt16( Console.ReadLine());
+                option = Convert.ToInt16(Console.ReadLine());
 
-                if (option == 1) {
+                if (option == 1)
+                {
 
-                    string referenceInput = getReferenceInput(); 
+                    string referenceInput = getReferenceInput();
 
                     Account account = dataService.getAccounts().FirstOrDefault(a => a.accountReference == referenceInput);// if input matches any accountReference in dummyAccounts, it will return the first match, otherwise its null.
 
                     processAccount(account);
-                } else if (option == 2)
+                }
+                else if (option == 2)
                 {
                     string accountReference;
                     int daysPassed, duration, interestRate, penaltyRate;
@@ -54,7 +57,7 @@ namespace TrackerLoan2
                     penaltyRate = int.Parse(Console.ReadLine());
 
 
-                    Account newAccount = new Account    
+                    Account newAccount = new Account
                     {
                         accountReference = accountReference,
                         amount = amount,
@@ -69,8 +72,9 @@ namespace TrackerLoan2
                         Console.WriteLine("Account Added!\n");
                     }
 
-                  
-                } else if (option == 3)
+
+                }
+                else if (option == 3)
                 {
                     break;
                 }
@@ -78,25 +82,25 @@ namespace TrackerLoan2
                 {
                     Console.WriteLine("Invalid number option\n");
                 }
-            } while (option!= 3);
+            } while (option != 3);
         }
 
         static double calculatePenaltyValue(double amount, double penaltyRate)
         {
-            return amount * (penaltyRate/100.0);
+            return amount * (penaltyRate / 100.0);
         }
 
         static double calculateTotalAmount(double amount, double penaltyValue)
         {
             return amount + penaltyValue;
         }
-        static void displayLoanInfo(double amount,int daysPassed, int duration, double interestRate,  double penaltyRate, double penaltyValue, double totalAmount)
+        static void displayLoanInfo(double amount, int daysPassed, int duration, double interestRate, double penaltyRate, double penaltyValue, double totalAmount)
         {
-            
-            Console.WriteLine("============= Loan Status ============="); 
-            Console.WriteLine($"Amount:  {amount} Php"); 
-            Console.WriteLine($"Due after:  {duration} days"); 
-            Console.WriteLine($"Days Passed Since loan:  {daysPassed} days"); 
+
+            Console.WriteLine("============= Loan Status =============");
+            Console.WriteLine($"Amount:  {amount} Php");
+            Console.WriteLine($"Due after:  {duration} days");
+            Console.WriteLine($"Days Passed Since loan:  {daysPassed} days");
             Console.WriteLine($"Interest Rate: {interestRate}%");
             Console.WriteLine($"Penalty Rate: {penaltyRate}%");
             Console.WriteLine($"Due Date Penalty:  {penaltyValue} Php");
@@ -114,8 +118,8 @@ namespace TrackerLoan2
             double totalAmount = 0;
             if (account != null)
             {
-                 
-                
+
+
 
                 int overdueDays = account.daysPassed - account.duration;
 
@@ -166,4 +170,3 @@ namespace TrackerLoan2
 
     }
 }
-    
