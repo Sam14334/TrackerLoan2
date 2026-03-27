@@ -3,11 +3,15 @@ using Models;
 
 namespace DataService
 {
-    public class DataService
+    public class DataService : IDataService
     {
         public List<Account> dummyAccounts = new List<Account>();
 
         public DataService()
+        {
+            populate();
+        }
+        public void populate()
         {
 
             Account dummyAcc1 = new Account
@@ -71,15 +75,20 @@ namespace DataService
             };
 
 
-            dummyAccounts.Add(dummyAcc1);
-            dummyAccounts.Add(almostDueAcc);
-            dummyAccounts.Add(dueTodayAcc);
-            dummyAccounts.Add(overdueAcc);
-            dummyAccounts.Add(notDueAcc);
-            dummyAccounts.Add(edgeAcc);
+            addAccount(dummyAcc1);
+            addAccount(almostDueAcc);
+            addAccount(dueTodayAcc);
+            addAccount(overdueAcc);
+            addAccount(notDueAcc);
+            addAccount(edgeAcc);
         }
         public bool addAccount(Account account)
         {
+            AppService.AppService appService = new AppService.AppService();
+
+            int overdueDays = account.daysPassed - account.duration;
+            double penaltyValue = appService.CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
+            account.amountToBePaid = appService.CalculateTotalAmount(account.amount, penaltyValue);
 
             dummyAccounts.Add(account);
             return true;
@@ -89,5 +98,7 @@ namespace DataService
         {
             return dummyAccounts;
         }
+
+        
     }
 }

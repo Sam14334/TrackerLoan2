@@ -16,18 +16,20 @@ namespace DataService
         private string _jsonFileName;
         public DataJson()
         {
+            Console.WriteLine("Json Data Method");
             _jsonFileName = $"{AppDomain.CurrentDomain.BaseDirectory}/Accounts.json";
 
-            PopulateJsonFile();
+            populate();
+            
         }
 
-        private void PopulateJsonFile()
+        public void populate()
         {
             RetrieveDataFromJsonFile();
 
             if (dummyAccounts.Count <= 0)
             {
-                dummyAccounts.Add(new Account
+                Account dummyAcc1 = new Account
                 {
                     accountReference = "abcd",
                     daysPassed = 31,
@@ -35,9 +37,9 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
-                });
+                };
 
-                dummyAccounts.Add(new Account
+                Account almostDueAcc = new Account
                 {
                     accountReference = "almost",
                     daysPassed = 26,
@@ -45,9 +47,9 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
-                });
+                };
 
-                dummyAccounts.Add(new Account
+                Account dueTodayAcc = new Account
                 {
                     accountReference = "today",
                     daysPassed = 30,
@@ -55,9 +57,9 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
-                });
+                };
 
-                dummyAccounts.Add(new Account
+                Account overdueAcc = new Account
                 {
                     accountReference = "overdue",
                     daysPassed = 35,
@@ -65,9 +67,9 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
-                });
+                };
 
-                dummyAccounts.Add(new Account
+                Account notDueAcc = new Account
                 {
                     accountReference = "notdue",
                     daysPassed = 10,
@@ -75,9 +77,9 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
-                });
+                };
 
-                dummyAccounts.Add(new Account
+                Account edgeAcc = new Account
                 {
                     accountReference = "edge",
                     daysPassed = 25,
@@ -85,7 +87,15 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
-                });
+                };
+
+
+                addAccount(dummyAcc1);
+                addAccount(almostDueAcc);
+                addAccount(dueTodayAcc);
+                addAccount(overdueAcc);
+                addAccount(notDueAcc);
+                addAccount(edgeAcc);
 
                 SaveDataToJsonFile();
             }
@@ -116,8 +126,17 @@ namespace DataService
 
         public bool addAccount(Account account)
         {
-            if (account != null)
+            AppService.AppService appService = new AppService.AppService();
+
+
+            if (account != null )
             {
+                int overdueDays = account.daysPassed - account.duration;
+                 
+                double penaltyValue = appService.CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
+                 
+                account.amountToBePaid = appService.CalculateTotalAmount(account.amount, penaltyValue);
+
                 dummyAccounts.Add(account);
                 SaveDataToJsonFile();
                 return true;

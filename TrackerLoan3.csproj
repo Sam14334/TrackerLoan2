@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="AppService\AppService.csproj" />
     <ProjectReference Include="DataService\DataService.csproj" />
   </ItemGroup>
 

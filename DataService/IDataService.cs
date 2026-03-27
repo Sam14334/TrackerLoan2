@@ -12,6 +12,7 @@ namespace DataService
     //follow its defined methods and attributes
     public interface IDataService
     {
+        void populate();
         bool addAccount(Account account);
 
         List<Account> getAccounts();

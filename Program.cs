@@ -1,4 +1,5 @@
-﻿using DataService;
+﻿using AppService;
+using DataService;
 using Models;
 using System.Linq;
 using System.Security.Principal;
@@ -12,11 +13,37 @@ namespace TrackerLoan2
             //Loan Tracking system for an Online banking app, with loan notification and penalties
 
             //Interface     name            class that implements interface
-            IDataService dataService = new DataJson(); //json data saving
-            //DataService.DataService dataService= new DataService.DataService(); //in-memory data saving
-            AppService.AppService appService = new AppService.AppService();
+            //IDataService dataService = new DataJson(); //json data saving
+            //IDataService dataService = new DataDB();
 
-            short option;
+            IDataService dataService = new DataService.DataService(); //in-memory data saving
+            
+            
+
+            short option1;
+            Console.WriteLine("============= Data Saving =============");
+            Console.WriteLine("Select a number for your desired data saving method"); 
+            Console.WriteLine("[1] In-memory");
+            Console.WriteLine("[2] Json file");
+            Console.WriteLine("[3] Sql table");
+            Console.WriteLine("[4] Exit\n");
+            option1 = Convert.ToInt16(Console.ReadLine());
+
+            if (option1 == 2)
+            {
+                dataService = new DataJson();
+            }
+            else if (option1 == 3)
+            {
+                dataService = new DataDB();
+            }
+            else if (option1 == 4)
+            {
+                Environment.Exit(0);
+            }
+
+
+                short option2;
             do
             {
                 Console.WriteLine("============= Loan Tracker =============");
@@ -25,9 +52,9 @@ namespace TrackerLoan2
                 Console.WriteLine("[2] Add Account (for testing)");
                 Console.WriteLine("[3] Exit\n");
 
-                option = Convert.ToInt16(Console.ReadLine());
+                option2 = Convert.ToInt16(Console.ReadLine());
 
-                if (option == 1)
+                if (option2 == 1)
                 {
 
                     string referenceInput = getReferenceInput();
@@ -36,7 +63,7 @@ namespace TrackerLoan2
 
                     processAccount(account);
                 }
-                else if (option == 2)
+                else if (option2 == 2)
                 {
                     string accountReference;
                     int daysPassed, duration, interestRate, penaltyRate;
@@ -71,10 +98,15 @@ namespace TrackerLoan2
                     {
                         Console.WriteLine("Account Added!\n");
                     }
+                    else
+                    {
+                        Console.WriteLine("Invalid Parameters!\n");
+                    }
+                
 
 
                 }
-                else if (option == 3)
+                else if (option2 == 3)
                 {
                     break;
                 }
@@ -82,18 +114,18 @@ namespace TrackerLoan2
                 {
                     Console.WriteLine("Invalid number option\n");
                 }
-            } while (option != 3);
+            } while (option2 != 3);
         }
 
-        static double calculatePenaltyValue(double amount, double penaltyRate)
-        {
-            return amount * (penaltyRate / 100.0);
-        }
+        //static double calculatePenaltyValue(double amount, double penaltyRate)
+        //{
+        //    return amount * (penaltyRate / 100.0);
+        //}
 
-        static double calculateTotalAmount(double amount, double penaltyValue)
-        {
-            return amount + penaltyValue;
-        }
+        //static double calculateTotalAmount(double amount, double penaltyValue)
+        //{
+        //    return amount + penaltyValue;
+        //}
         static void displayLoanInfo(double amount, int daysPassed, int duration, double interestRate, double penaltyRate, double penaltyValue, double totalAmount)
         {
 
@@ -114,26 +146,25 @@ namespace TrackerLoan2
         }
         static void processAccount(Account account)
         {
-            double penaltyValue = 0;
-            double totalAmount = 0;
+            AppService.AppService appService = new AppService.AppService();
+
+            
             if (account != null)
             {
-
-
-
                 int overdueDays = account.daysPassed - account.duration;
+                double penaltyValue = 0;
+                double totalAmount = 0;
 
-                // ✅ Only calculate penalty if overdue
                 if (overdueDays > 0)
                 {
-                    penaltyValue = calculatePenaltyValue(account.amount, account.penaltyRate) * overdueDays;
+                    penaltyValue = appService.CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays); 
                 }
                 else
                 {
                     penaltyValue = 0;
                 }
-
-                totalAmount = calculateTotalAmount(account.amount, penaltyValue);
+                 
+                totalAmount = appService.CalculateTotalAmount(account.amount, penaltyValue);
 
                 if (account.daysPassed >= (account.duration - 5) && account.daysPassed < account.duration)
                 {
@@ -155,10 +186,7 @@ namespace TrackerLoan2
                     displayLoanInfo(account.amount, account.daysPassed, account.duration, account.interestRate, account.penaltyRate, penaltyValue, totalAmount);
                     Console.WriteLine($"Your loan is not due yet");
                 }
-
-
-
-
+                 
 
             }
             else
