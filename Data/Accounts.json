@@ -1,0 +1,56 @@
+[
+  {
+    "accountReference": "abcd",
+    "duration": 30,
+    "daysPassed": 31,
+    "interestRate": 10,
+    "penaltyRate": 5,
+    "amount": 1000,
+    "amountToBePaid": 1050
+  },
+  {
+    "accountReference": "almost",
+    "duration": 30,
+    "daysPassed": 26,
+    "interestRate": 10,
+    "penaltyRate": 5,
+    "amount": 1000,
+    "amountToBePaid": 1000
+  },
+  {
+    "accountReference": "today",
+    "duration": 30,
+    "daysPassed": 30,
+    "interestRate": 10,
+    "penaltyRate": 5,
+    "amount": 1000,
+    "amountToBePaid": 1000
+  },
+  {
+    "accountReference": "overdue",
+    "duration": 30,
+    "daysPassed": 35,
+    "interestRate": 10,
+    "penaltyRate": 5,
+    "amount": 1000,
+    "amountToBePaid": 1250
+  },
+  {
+    "accountReference": "notdue",
+    "duration": 30,
+    "daysPassed": 10,
+    "interestRate": 10,
+    "penaltyRate": 5,
+    "amount": 1000,
+    "amountToBePaid": 1000
+  },
+  {
+    "accountReference": "edge",
+    "duration": 30,
+    "daysPassed": 25,
+    "interestRate": 10,
+    "penaltyRate": 5,
+    "amount": 1000,
+    "amountToBePaid": 1000
+  }
+]
