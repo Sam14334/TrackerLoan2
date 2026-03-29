@@ -109,25 +109,7 @@ namespace DataService
             sqlConnection.Close();
             
         }
-
-        //private void addPopulate(string accountReference, int duration, int daysPassed, int interestRate, int penaltyRate, double amount, double amountToBePaid)
-        //{
-        //    string insertStatement =
-        //    "INSERT INTO Accounts VALUES(@accountReference, @duration,@daysPassed, @interestRate, @penaltyRate, @amount, @amountToBePaid)";
-
-        //    SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
-
-        //    insertCommand.Parameters.AddWithValue("@accountReference", accountReference);
-        //    insertCommand.Parameters.AddWithValue("@duration", duration);
-        //    insertCommand.Parameters.AddWithValue("@daysPassed", daysPassed);
-        //    insertCommand.Parameters.AddWithValue("@interestRate", interestRate);
-        //    insertCommand.Parameters.AddWithValue("@penaltyRate", penaltyRate);
-        //    insertCommand.Parameters.Add("@amount", SqlDbType.Decimal).Value = amount;
-        //    insertCommand.Parameters.Add("@amountToBePaid", SqlDbType.Decimal).Value = amountToBePaid;
-
-        //    insertCommand.ExecuteNonQuery();
-
-           
+         
         //}
         public bool addAccount(Account account)
         {

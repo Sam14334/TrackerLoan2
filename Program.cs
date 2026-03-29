@@ -116,16 +116,7 @@ namespace TrackerLoan2
                 }
             } while (option2 != 3);
         }
-
-        //static double calculatePenaltyValue(double amount, double penaltyRate)
-        //{
-        //    return amount * (penaltyRate / 100.0);
-        //}
-
-        //static double calculateTotalAmount(double amount, double penaltyValue)
-        //{
-        //    return amount + penaltyValue;
-        //}
+         
         static void displayLoanInfo(double amount, int daysPassed, int duration, double interestRate, double penaltyRate, double penaltyValue, double totalAmount)
         {
 

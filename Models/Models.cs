@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class Account
+    public class Account 
     {
         public string accountReference { get; set; }
         public int duration { get; set; }
