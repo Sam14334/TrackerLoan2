@@ -1,4 +1,4 @@
-﻿using AppService;
+﻿using AppService; 
 using DataService;
 using Models;
 using System.Linq;
@@ -43,7 +43,7 @@ namespace TrackerLoan2
             }
 
 
-                short option2;
+            short option2;
             do
             {
                 Console.WriteLine("============= Loan Tracker =============");
@@ -70,12 +70,7 @@ namespace TrackerLoan2
                     }
                     else
                     {
-                        displayLoanInfo(
-                            result.Account,
-                            result.StatusMessage,
-                            result.PenaltyValue,
-                            result.TotalAmount
-                        );
+                        displayLoanInfo( result.Account, result.StatusMessage, result.PenaltyValue, result.TotalAmount);
                     }
                 }
                 else if (option2 == 2)
@@ -117,9 +112,7 @@ namespace TrackerLoan2
                     {
                         Console.WriteLine("Invalid Parameters!\n");
                     }
-                
-
-
+                 
                 }
                 else if (option2 == 3)
                 {
