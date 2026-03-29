@@ -60,8 +60,23 @@ namespace TrackerLoan2
                     string referenceInput = getReferenceInput();
 
                     Account account = dataService.getAccounts().FirstOrDefault(a => a.accountReference == referenceInput);// if input matches any accountReference in dummyAccounts, it will return the first match, otherwise its null.
-                    var result = appService.ProcessAccount(account);
-                    displayLoanInfo(result.Item1, result.Item2, result.Item3, result.Item4);
+                   
+
+                    LoanResult result = appService.ProcessAccount(account);
+
+                    if (result.Account == null)
+                    {
+                        Console.WriteLine(result.StatusMessage);
+                    }
+                    else
+                    {
+                        displayLoanInfo(
+                            result.Account,
+                            result.StatusMessage,
+                            result.PenaltyValue,
+                            result.TotalAmount
+                        );
+                    }
                 }
                 else if (option2 == 2)
                 {
@@ -117,7 +132,7 @@ namespace TrackerLoan2
             } while (option2 != 3);
         }
          
-        static void displayLoanInfo(Account account,string result, double penaltyValue, double totalAmount)
+        static void displayLoanInfo(Account account,string status, double penaltyValue, double totalAmount)
         {
 
             Console.WriteLine("============= Loan Status =============");
@@ -129,7 +144,7 @@ namespace TrackerLoan2
             Console.WriteLine($"Due Date Penalty:  {penaltyValue} Php");
             Console.WriteLine($"Total amount to be paid:  {totalAmount} Php\n");
 
-            Console.WriteLine(result);
+            Console.WriteLine(status);
         }
         static string getReferenceInput()
         {

@@ -15,54 +15,49 @@ namespace AppService
             return amount + penaltyValue;
         }
 
-        public (Account,string, double,double)  ProcessAccount(Account account)
+        public int CalculateOverdueDays (int daysPassed, int duration)
         {
-            string status = "Invalid Reference Please try again";
-            double penaltyValue =0;
-            double totalAmount =0;
-            if (account != null)
+            return daysPassed - duration;
+        }
+
+        public LoanResult ProcessAccount(Account account)
+        {
+            LoanResult result = new LoanResult();
+
+            if (account == null)
             {
-                int overdueDays = account.daysPassed - account.duration; 
-                
+                result.StatusMessage = "Invalid Reference. Please try again.";
+                return result;
+            }
 
-                if (overdueDays > 0)
-                {
-                    penaltyValue = CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
-                }
-                else
-                {
-                    penaltyValue = 0;
-                }
+            result.Account = account;
 
-                totalAmount = CalculateTotalAmount(account.amount, penaltyValue);
+            int overdueDays = CalculateOverdueDays(account.daysPassed, account.duration);
 
-                if (account.daysPassed >= (account.duration - 5) && account.daysPassed < account.duration)
-                {
-                    status = "Your loan is almost due, please settle it immediately.\n";
-                    return (account, status, penaltyValue,totalAmount); 
-                }
-                else if (account.daysPassed == account.duration)
-                {
-                    status = "Your loan is due today. Please settle it now.\n";
-                    return (account, status,penaltyValue, totalAmount); 
-                }
-                else if (account.daysPassed > account.duration)
-                {
-                    status = $"Loan is overdue by {overdueDays} day/s.\nPenalty applied: {penaltyValue} Php.\n";
-                    return (account, status,penaltyValue, totalAmount); 
-                }
-                else
-                {
-                    status = "Your loan is not due yet.\n";
-                    return (account, status, penaltyValue, totalAmount);
-                }
+           
 
-
+            if(overdueDays> 0)
+            {
+                result.PenaltyValue = CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
             }
             else
             {
-                return (account,status,penaltyValue, totalAmount);
+                result.PenaltyValue = 0;
             }
+
+                result.TotalAmount = CalculateTotalAmount(account.amount, result.PenaltyValue);
+
+            if (account.daysPassed >= (account.duration - 5) && account.daysPassed < account.duration)
+                result.StatusMessage = "Your loan is almost due";
+            else if (account.daysPassed == account.duration)
+                result.StatusMessage = "Your loan is due today. Please settle it immediately";
+            else if (account.daysPassed > account.duration)
+                result.StatusMessage = $"Loan is overdue by {overdueDays} days. Penalty Applied";
+            else
+                result.StatusMessage = "Your loan is not due yet.";
+
+            return result;
         }
+    
     }
 }
