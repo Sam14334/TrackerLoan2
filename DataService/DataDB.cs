@@ -110,7 +110,6 @@ namespace DataService
             
         }
          
-        //}
         public bool addAccount(Account account)
         {
             AppService.AppService appService = new AppService.AppService();
