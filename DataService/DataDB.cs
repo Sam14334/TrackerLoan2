@@ -1,4 +1,4 @@
-﻿using AppService;
+﻿//using AppService;
 using Microsoft.Data.SqlClient;
 using Models;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataService
 {
-    internal class DataDB : IDataService
+    public class DataDB : IDataService
     {
         private string connectionString = "Data Source=localhost\\SQLEXPRESS02;Initial Catalog=LoanTracker;Integrated Security=True;TrustServerCertificate=True;";
 
@@ -112,13 +112,13 @@ namespace DataService
          
         public bool addAccount(Account account)
         {
-            AppService.AppService appService = new AppService.AppService();
+            //AppService.AppService appService = new AppService.AppService();
 
             if (account != null)
             {
                 int overdueDays = account.daysPassed - account.duration;
-                double penaltyValue = appService.CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
-                account.amountToBePaid = appService.CalculateTotalAmount(account.amount, penaltyValue);
+                //double penaltyValue = appService.CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
+                //account.amountToBePaid = appService.CalculateTotalAmount(account.amount, penaltyValue);
 
                 string insertStatement =
                 "INSERT INTO Accounts VALUES(@accountReference, @duration,@daysPassed, @interestRate, @penaltyRate, @amount, @amountToBePaid)";

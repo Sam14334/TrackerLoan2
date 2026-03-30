@@ -1,9 +1,32 @@
 ﻿using System.Security.Principal;
 using Models;
+using DataService;
 namespace AppService
 {
     public class AppService
     {
+        IDataService dataService = new DataService.DataService();
+        public AppService()
+        {
+
+        }
+        public AppService (short dataOption)
+        {
+            
+            if (dataOption == 2)
+            {
+                dataService = new DataJson();
+            }
+            else if (dataOption == 3)
+            {
+                dataService = new DataDB();
+            }
+            else if (dataOption == 4)
+            {
+                Environment.Exit(0);
+            }
+        }
+        
         public  double CalculatePenaltyValue(double amount, double penaltyRate, int overdueDays)
         {
             if (overdueDays <= 0) return 0;
@@ -19,6 +42,8 @@ namespace AppService
         {
             return daysPassed - duration;
         }
+
+
 
         public LoanResult ProcessAccount(Account account)
         {
@@ -45,7 +70,7 @@ namespace AppService
                 result.PenaltyValue = 0;
             }
 
-                result.TotalAmount = CalculateTotalAmount(account.amount, result.PenaltyValue);
+            result.TotalAmount = CalculateTotalAmount(account.amount, result.PenaltyValue);
 
             if (account.daysPassed >= (account.duration - 5) && account.daysPassed < account.duration)
                 result.StatusMessage = "Your loan is almost due";
@@ -59,5 +84,20 @@ namespace AppService
             return result;
         }
 
+        public List<Account> GetAccounts()
+        {
+           return dataService.getAccounts();
+        }
+
+        public bool RegisterAccount(Account account)
+        { 
+
+            int overdueDays = account.daysPassed - account.duration;
+            double penaltyValue = CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
+            account.amountToBePaid = CalculateTotalAmount(account.amount, penaltyValue);
+
+            return dataService.addAccount(account); 
+
+        }
     }
 }

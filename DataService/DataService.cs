@@ -84,12 +84,6 @@ namespace DataService
         }
         public bool addAccount(Account account)
         {
-            AppService.AppService appService = new AppService.AppService();
-
-            int overdueDays = account.daysPassed - account.duration;
-            double penaltyValue = appService.CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
-            account.amountToBePaid = appService.CalculateTotalAmount(account.amount, penaltyValue);
-
             dummyAccounts.Add(account);
             return true;
         }

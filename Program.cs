@@ -15,35 +15,25 @@ namespace TrackerLoan2
             //Interface     name            class that implements interface
             //IDataService dataService = new DataJson(); //json data saving
             //IDataService dataService = new DataDB();
+            //IDataService dataService = new DataService.DataService(); //in-memory data saving
 
-            IDataService dataService = new DataService.DataService(); //in-memory data saving
-            AppService.AppService appService= new AppService.AppService();
             
 
-            short option1;
+
+            short dataOption;
             Console.WriteLine("============= Data Saving =============");
-            Console.WriteLine("Select a number for your desired data saving method"); 
+            Console.WriteLine("Select a number for your desired data saving method");
             Console.WriteLine("[1] In-memory");
             Console.WriteLine("[2] Json file");
             Console.WriteLine("[3] Sql table");
             Console.WriteLine("[4] Exit\n");
-            option1 = Convert.ToInt16(Console.ReadLine());
+            dataOption = Convert.ToInt16(Console.ReadLine());
 
-            if (option1 == 2)
-            {
-                dataService = new DataJson();
-            }
-            else if (option1 == 3)
-            {
-                dataService = new DataDB();
-            }
-            else if (option1 == 4)
-            {
-                Environment.Exit(0);
-            }
+            AppService.AppService appService = new AppService.AppService(dataOption);
+             
 
 
-            short option2;
+            short menuOption;
             do
             {
                 Console.WriteLine("============= Loan Tracker =============");
@@ -52,14 +42,14 @@ namespace TrackerLoan2
                 Console.WriteLine("[2] Add Account (for testing)");
                 Console.WriteLine("[3] Exit\n");
 
-                option2 = Convert.ToInt16(Console.ReadLine());
+                menuOption = Convert.ToInt16(Console.ReadLine());
 
-                if (option2 == 1)
+                if (menuOption == 1)
                 {
 
                     string referenceInput = getReferenceInput();
 
-                    Account account = dataService.getAccounts().FirstOrDefault(a => a.accountReference == referenceInput);// if input matches any accountReference in dummyAccounts, it will return the first match, otherwise its null.
+                    Account account = appService.GetAccounts().FirstOrDefault(a => a.accountReference == referenceInput);// if input matches any accountReference in dummyAccounts, it will return the first match, otherwise its null.
                    
 
                     LoanResult result = appService.ProcessAccount(account);
@@ -73,7 +63,7 @@ namespace TrackerLoan2
                         displayLoanInfo( result.Account, result.StatusMessage, result.PenaltyValue, result.TotalAmount);
                     }
                 }
-                else if (option2 == 2)
+                else if (menuOption == 2)
                 {
                     string accountReference;
                     int daysPassed, duration, interestRate, penaltyRate;
@@ -104,7 +94,7 @@ namespace TrackerLoan2
                         penaltyRate = penaltyRate,
                     };
 
-                    if (dataService.addAccount(newAccount))
+                    if (appService.RegisterAccount(newAccount))
                     {
                         Console.WriteLine("Account Added!\n");
                     }
@@ -114,7 +104,7 @@ namespace TrackerLoan2
                     }
                  
                 }
-                else if (option2 == 3)
+                else if (menuOption == 3)
                 {
                     break;
                 }
@@ -122,7 +112,7 @@ namespace TrackerLoan2
                 {
                     Console.WriteLine("Invalid number option\n");
                 }
-            } while (option2 != 3);
+            } while (menuOption != 3);
         }
          
         static void displayLoanInfo(Account account,string status, double penaltyValue, double totalAmount)
