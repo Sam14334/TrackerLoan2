@@ -27,18 +27,18 @@ namespace AppService
             }
         }
         
-        public  double CalculatePenaltyValue(double amount, double penaltyRate, int overdueDays)
+        private  double CalculatePenaltyValue(double amount, double penaltyRate, int overdueDays)
         {
             if (overdueDays <= 0) return 0;
             return amount * (penaltyRate / 100.0) * overdueDays;
         }
 
-        public  double CalculateTotalAmount(double amount, double penaltyValue)
+        private double CalculateTotalAmount(double amount, double penaltyValue)
         {
             return amount + penaltyValue;
         }
 
-        public int CalculateOverdueDays (int daysPassed, int duration)
+        private int CalculateOverdueDays (int daysPassed, int duration)
         {
             return daysPassed - duration;
         }
@@ -89,6 +89,12 @@ namespace AppService
            return dataService.getAccounts();
         }
 
+        public List<Account> GetAllAccounts()
+        {
+            
+            return dataService.getAccounts();
+
+        }
         public bool RegisterAccount(Account account)
         { 
 
@@ -98,6 +104,26 @@ namespace AppService
 
             return dataService.addAccount(account); 
 
+        } 
+        public bool ResetAccounts()
+        {
+           return dataService.resetAccounts();
         }
+       
+        public bool UpdateAccount(Account account, Account newAccount)
+        { 
+           return dataService.updateAccount(account, newAccount);
+             
+        }
+
+        public bool DeleteAccount(Account account)
+        {
+            if(account == null)
+            {
+                return false;
+            }
+            return dataService.deleteAccount(account);
+        }
+         
     }
 }

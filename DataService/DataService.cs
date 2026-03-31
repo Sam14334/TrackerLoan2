@@ -84,15 +84,45 @@ namespace DataService
         }
         public bool addAccount(Account account)
         {
+             
+            if (getAccounts().FirstOrDefault(a => a.accountReference == account.accountReference)!=null)
+            {
+                return false;
+            }
             dummyAccounts.Add(account);
             return true;
         }
 
         public List<Account> getAccounts()
         {
-            return dummyAccounts;
+            return dummyAccounts; 
+        }
+         
+        public bool resetAccounts()
+        { 
+            dummyAccounts.Clear();
+            populate();
+            return true;
+             
         }
 
-        
+        public bool updateAccount(Account account, Account newAccount)
+        {
+             
+            account.accountReference = newAccount.accountReference;
+            account.amount = newAccount.amount;
+            account.daysPassed = newAccount.daysPassed;
+            account.duration = newAccount.duration;
+            account.interestRate = newAccount.interestRate;
+            account.penaltyRate = newAccount.penaltyRate;
+            return true;
+              
+        }
+
+        public bool deleteAccount(Account account)
+        {
+            dummyAccounts.Remove(account);
+            return true;
+        }
     }
 }

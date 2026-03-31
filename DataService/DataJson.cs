@@ -125,18 +125,12 @@ namespace DataService
         }
 
         public bool addAccount(Account account)
-        {
-            //AppService.AppService appService = new AppService.AppService();
-
+        { 
 
             if (account != null )
             {
                 int overdueDays = account.daysPassed - account.duration;
-                 
-                //double penaltyValue = appService.CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
-                 
-                //account.amountToBePaid = appService.CalculateTotalAmount(account.amount, penaltyValue);
-
+                  
                 dummyAccounts.Add(account);
                 SaveDataToJsonFile();
                 return true;
@@ -151,6 +145,21 @@ namespace DataService
         {
             SaveDataToJsonFile();
             return dummyAccounts;
+        }
+
+        public bool resetAccounts()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool updateAccount(Account account, Account newAccount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool deleteAccount(Account account)
+        {
+            throw new NotImplementedException();
         }
     }
 }

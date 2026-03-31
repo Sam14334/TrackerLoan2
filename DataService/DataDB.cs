@@ -180,5 +180,20 @@ namespace DataService
             sqlConnection.Close();
             return accounts;
         }
+
+        public bool resetAccounts()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool updateAccount(Account account, Account newAccount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool deleteAccount(Account account)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
