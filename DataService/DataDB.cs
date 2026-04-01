@@ -24,8 +24,7 @@ namespace DataService
         }
 
         public void populate()
-        {
-            Console.WriteLine("SQL Data Method");
+        { 
 
             List<Account> currentAccounts = getAccounts();
 
@@ -112,34 +111,34 @@ namespace DataService
          
         public bool addAccount(Account account)
         { 
-            if (account != null)
+            if (getAccounts().FirstOrDefault(a => a.accountReference == account.accountReference) != null)
             {
-                int overdueDays = account.daysPassed - account.duration; 
+                
+                return false;
+            } 
+            int overdueDays = account.daysPassed - account.duration;
 
-                string insertStatement =
-                "INSERT INTO Accounts VALUES(@accountReference, @duration,@daysPassed, @interestRate, @penaltyRate, @amount)";
+            string insertStatement =
+            "INSERT INTO Accounts VALUES(@accountReference, @duration,@daysPassed, @interestRate, @penaltyRate, @amount)";
 
-                SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
+            SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
-                if (sqlConnection.State == System.Data.ConnectionState.Closed)
-                {
-                    sqlConnection.Open();
-                }
-
-                insertCommand.Parameters.AddWithValue("@accountReference", account.accountReference);
-                insertCommand.Parameters.AddWithValue("@duration", account.duration);
-                insertCommand.Parameters.AddWithValue("@daysPassed", account.daysPassed);
-                insertCommand.Parameters.AddWithValue("@interestRate", account.interestRate);
-                insertCommand.Parameters.AddWithValue("@penaltyRate", account.penaltyRate);
-                insertCommand.Parameters.Add("@amount", SqlDbType.Decimal).Value = account.amount; 
-
-                insertCommand.ExecuteNonQuery();
-                sqlConnection.Close();
-                return true;
+            if (sqlConnection.State == System.Data.ConnectionState.Closed)
+            {
+                sqlConnection.Open();
             }
-            else { 
-                return false; 
-            }
+
+            insertCommand.Parameters.AddWithValue("@accountReference", account.accountReference);
+            insertCommand.Parameters.AddWithValue("@duration", account.duration);
+            insertCommand.Parameters.AddWithValue("@daysPassed", account.daysPassed);
+            insertCommand.Parameters.AddWithValue("@interestRate", account.interestRate);
+            insertCommand.Parameters.AddWithValue("@penaltyRate", account.penaltyRate);
+            insertCommand.Parameters.Add("@amount", SqlDbType.Decimal).Value = account.amount;
+
+            insertCommand.ExecuteNonQuery();
+            sqlConnection.Close();
+            return true; 
+            
         }
 
 
@@ -177,26 +176,59 @@ namespace DataService
 
         public bool resetAccounts()
         {
-            //string truncateStatement = "TRUNCATE TABLE Accounts";
-            //SqlCommand selectCommand = new SqlCommand(truncateStatement, sqlConnection);
-            //if (sqlConnection.State == System.Data.ConnectionState.Closed)
-            //{
-            //    sqlConnection.Open();
-            //}
-            //selectCommand.ExecuteNonQuery();
-            //populate();
-            //sqlConnection.Close();
+            string truncateStatement = "TRUNCATE TABLE Accounts";
+            SqlCommand selectCommand = new SqlCommand(truncateStatement, sqlConnection);
+            if (sqlConnection.State == System.Data.ConnectionState.Closed)
+            {
+                sqlConnection.Open();
+            }
+            selectCommand.ExecuteNonQuery();
+            populate();
+            sqlConnection.Close();
             return true;
         }
 
         public bool updateAccount(Account account, Account newAccount)
         {
-            throw new NotImplementedException();
+            string updateStatement =
+            @" 
+            UPDATE Accounts SET accountReference = @accountReference, duration = @duration, daysPassed = @daysPassed, 
+            interestRate = @interestRate, penaltyRate = @penaltyRate,  amount = @amount
+            WHERE accountReference = @oldAccountReference";
+
+            if (sqlConnection.State == System.Data.ConnectionState.Closed)
+            {
+                sqlConnection.Open();
+            }
+            SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
+
+            updateCommand.Parameters.AddWithValue("@oldAccountReference", account.accountReference);
+            updateCommand.Parameters.AddWithValue("@accountReference", newAccount.accountReference);
+            updateCommand.Parameters.AddWithValue("@duration", newAccount.duration);
+            updateCommand.Parameters.AddWithValue("@daysPassed", newAccount.daysPassed);
+            updateCommand.Parameters.AddWithValue("@interestRate", newAccount.interestRate);
+            updateCommand.Parameters.AddWithValue("@penaltyRate", newAccount.penaltyRate);
+            updateCommand.Parameters.Add("@amount", SqlDbType.Decimal).Value = newAccount.amount;
+
+            updateCommand.ExecuteNonQuery();
+            sqlConnection.Close ();
+            return true; 
         }
 
         public bool deleteAccount(Account account)
         {
-            throw new NotImplementedException();
+            string deleteStatement = "DELETE FROM Accounts WHERE accountReference = @accountReference";
+
+            if (sqlConnection.State == System.Data.ConnectionState.Closed)
+            {
+                sqlConnection.Open();
+            }
+            SqlCommand deleteCommand = new SqlCommand(deleteStatement, sqlConnection);
+
+            deleteCommand.Parameters.AddWithValue("@accountReference", account.accountReference);
+            deleteCommand.ExecuteNonQuery();
+            sqlConnection.Close();
+            return true; 
         }
     }
 }

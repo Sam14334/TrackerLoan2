@@ -15,8 +15,7 @@ namespace DataService
 
         private string _jsonFileName;
         public DataJson()
-        {
-            Console.WriteLine("Json Data Method");
+        { 
             _jsonFileName = $"{AppDomain.CurrentDomain.BaseDirectory}/Accounts.json";
 
             populate();
@@ -101,44 +100,21 @@ namespace DataService
             }
         }
 
-        private void SaveDataToJsonFile()
-        {
-            using (var outputStream = File.Create(_jsonFileName))
-            {
-                JsonSerializer.Serialize<List<Account>>(
-                    new Utf8JsonWriter(outputStream, new JsonWriterOptions
-                    { SkipValidation = true, Indented = true })
-                    , dummyAccounts);
-            }
-        }
-
-        private void RetrieveDataFromJsonFile()
-        {
-
-            using (var jsonFileReader = File.OpenText(this._jsonFileName))
-            {
-                this.dummyAccounts = JsonSerializer.Deserialize<List<Account>>
-                    (jsonFileReader.ReadToEnd(), new JsonSerializerOptions
-                    { PropertyNameCaseInsensitive = true })
-                    .ToList();
-            }
-        }
 
         public bool addAccount(Account account)
         { 
 
-            if (account != null )
+            if (getAccounts().FirstOrDefault(a => a.accountReference == account.accountReference)!= null)
             {
-                int overdueDays = account.daysPassed - account.duration;
                 
-                dummyAccounts.Add(account);
-                SaveDataToJsonFile();
-                return true;
-            }
-            else
-            {
                 return false;
             }
+            //int overdueDays = account.daysPassed - account.duration;
+
+            dummyAccounts.Add(account);
+            SaveDataToJsonFile();
+            return true;
+            
         }
 
         public List<Account> getAccounts()
@@ -175,6 +151,30 @@ namespace DataService
             dummyAccounts.Remove(account);
             SaveDataToJsonFile();
             return true;
+        }
+
+
+        private void SaveDataToJsonFile()
+        {
+            using (var outputStream = File.Create(_jsonFileName))
+            {
+                JsonSerializer.Serialize<List<Account>>(
+                    new Utf8JsonWriter(outputStream, new JsonWriterOptions
+                    { SkipValidation = true, Indented = true })
+                    , dummyAccounts);
+            }
+        }
+
+        private void RetrieveDataFromJsonFile()
+        {
+
+            using (var jsonFileReader = File.OpenText(this._jsonFileName))
+            {
+                this.dummyAccounts = JsonSerializer.Deserialize<List<Account>>
+                    (jsonFileReader.ReadToEnd(), new JsonSerializerOptions
+                    { PropertyNameCaseInsensitive = true })
+                    .ToList();
+            }
         }
     }
 }
