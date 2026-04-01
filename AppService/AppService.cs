@@ -98,9 +98,6 @@ namespace AppService
         public bool RegisterAccount(Account account)
         { 
 
-            int overdueDays = account.daysPassed - account.duration;
-            double penaltyValue = CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
-            account.amountToBePaid = CalculateTotalAmount(account.amount, penaltyValue);
 
             return dataService.addAccount(account); 
 
@@ -111,8 +108,8 @@ namespace AppService
         }
        
         public bool UpdateAccount(Account account, Account newAccount)
-        { 
-           return dataService.updateAccount(account, newAccount);
+        {;
+            return dataService.updateAccount(account, newAccount);
              
         }
 

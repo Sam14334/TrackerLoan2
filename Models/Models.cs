@@ -7,8 +7,7 @@
         public int daysPassed { get; set; }
         public int interestRate { get; set; }
         public int penaltyRate { get; set; }
-        public double amount { get; set; }
-        public double amountToBePaid { get; set; }
+        public double amount { get; set; } 
     }
 
     public class LoanResult

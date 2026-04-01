@@ -21,7 +21,7 @@ namespace DataService
                 duration = 30,
                 amount = 1000,
                 interestRate = 10,
-                penaltyRate = 5,
+                penaltyRate = 5, 
             };
 
             Account almostDueAcc = new Account

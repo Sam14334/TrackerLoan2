@@ -117,7 +117,7 @@ namespace DataService
                 int overdueDays = account.daysPassed - account.duration; 
 
                 string insertStatement =
-                "INSERT INTO Accounts VALUES(@accountReference, @duration,@daysPassed, @interestRate, @penaltyRate, @amount, @amountToBePaid)";
+                "INSERT INTO Accounts VALUES(@accountReference, @duration,@daysPassed, @interestRate, @penaltyRate, @amount)";
 
                 SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
@@ -131,8 +131,7 @@ namespace DataService
                 insertCommand.Parameters.AddWithValue("@daysPassed", account.daysPassed);
                 insertCommand.Parameters.AddWithValue("@interestRate", account.interestRate);
                 insertCommand.Parameters.AddWithValue("@penaltyRate", account.penaltyRate);
-                insertCommand.Parameters.Add("@amount", SqlDbType.Decimal).Value = account.amount;
-                insertCommand.Parameters.Add("@amountToBePaid", SqlDbType.Decimal).Value = account.amountToBePaid;
+                insertCommand.Parameters.Add("@amount", SqlDbType.Decimal).Value = account.amount; 
 
                 insertCommand.ExecuteNonQuery();
                 sqlConnection.Close();
@@ -146,7 +145,7 @@ namespace DataService
 
         public List<Account> getAccounts()
         {
-            string selectStatement = "SELECT accountReference,duration,daysPassed,interestRate,penaltyRate,amount,amountToBePaid FROM Accounts";
+            string selectStatement = "SELECT accountReference,duration,daysPassed,interestRate,penaltyRate,amount FROM Accounts";
             SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
             if (sqlConnection.State == System.Data.ConnectionState.Closed)
             {
@@ -167,7 +166,6 @@ namespace DataService
                 account.interestRate = Convert.ToInt32(reader["interestRate"]);
                 account.penaltyRate = Convert.ToInt32(reader["penaltyRate"]);
                 account.amount = Convert.ToDouble(reader["amount"]);
-                account.amountToBePaid = Convert.ToDouble(reader["amountToBePaid"]);
 
 
                 accounts.Add(account);
@@ -179,7 +177,16 @@ namespace DataService
 
         public bool resetAccounts()
         {
-            throw new NotImplementedException();
+            //string truncateStatement = "TRUNCATE TABLE Accounts";
+            //SqlCommand selectCommand = new SqlCommand(truncateStatement, sqlConnection);
+            //if (sqlConnection.State == System.Data.ConnectionState.Closed)
+            //{
+            //    sqlConnection.Open();
+            //}
+            //selectCommand.ExecuteNonQuery();
+            //populate();
+            //sqlConnection.Close();
+            return true;
         }
 
         public bool updateAccount(Account account, Account newAccount)
