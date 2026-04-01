@@ -2,7 +2,7 @@
 {
     public class Account 
     {
-        public string accountReference { get; set; }
+        public string  accountReference { get; set; }
         public int duration { get; set; }
         public int daysPassed { get; set; }
         public int interestRate { get; set; }

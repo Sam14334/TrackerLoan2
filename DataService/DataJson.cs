@@ -103,7 +103,7 @@ namespace DataService
 
         private void SaveDataToJsonFile()
         {
-            using (var outputStream = File.OpenWrite(_jsonFileName))
+            using (var outputStream = File.Create(_jsonFileName))
             {
                 JsonSerializer.Serialize<List<Account>>(
                     new Utf8JsonWriter(outputStream, new JsonWriterOptions
@@ -143,23 +143,38 @@ namespace DataService
 
         public List<Account> getAccounts()
         {
-            SaveDataToJsonFile();
+            RetrieveDataFromJsonFile();
             return dummyAccounts;
         }
 
         public bool resetAccounts()
         {
-            throw new NotImplementedException();
+            dummyAccounts.Clear();
+            SaveDataToJsonFile();
+
+            populate();           
+
+            return true;
+            
         }
 
         public bool updateAccount(Account account, Account newAccount)
         {
-            throw new NotImplementedException();
+            account.accountReference = newAccount.accountReference;
+            account.amount = newAccount.amount;
+            account.daysPassed = newAccount.daysPassed;
+            account.duration = newAccount.duration;
+            account.interestRate = newAccount.interestRate;
+            account.penaltyRate = newAccount.penaltyRate;
+            SaveDataToJsonFile();
+            return true;
         }
 
         public bool deleteAccount(Account account)
         {
-            throw new NotImplementedException();
+            dummyAccounts.Remove(account);
+            SaveDataToJsonFile();
+            return true;
         }
     }
 }

@@ -111,14 +111,10 @@ namespace DataService
         }
          
         public bool addAccount(Account account)
-        {
-            //AppService.AppService appService = new AppService.AppService();
-
+        { 
             if (account != null)
             {
-                int overdueDays = account.daysPassed - account.duration;
-                //double penaltyValue = appService.CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
-                //account.amountToBePaid = appService.CalculateTotalAmount(account.amount, penaltyValue);
+                int overdueDays = account.daysPassed - account.duration; 
 
                 string insertStatement =
                 "INSERT INTO Accounts VALUES(@accountReference, @duration,@daysPassed, @interestRate, @penaltyRate, @amount, @amountToBePaid)";
