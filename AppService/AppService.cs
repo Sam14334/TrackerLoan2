@@ -98,7 +98,10 @@ namespace AppService
         public bool RegisterAccount(Account account)
         { 
 
-
+            if(account.amount==0|| account.duration == 0 || account.daysPassed == 0 || string.IsNullOrEmpty(account.accountReference))
+            {
+                return false;
+            }
             return dataService.addAccount(account); 
 
         } 
@@ -108,7 +111,11 @@ namespace AppService
         }
        
         public bool UpdateAccount(Account account, Account newAccount)
-        {;
+        {
+            if (newAccount.amount == 0 || newAccount.duration == 0 || newAccount.daysPassed == 0 || string.IsNullOrEmpty(account.accountReference))
+            {
+                return false;
+            }
             return dataService.updateAccount(account, newAccount);
              
         }
