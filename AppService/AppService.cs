@@ -84,9 +84,9 @@ namespace AppService
             return result;
         }
 
-        public List<Account> GetAccounts()
+        public Account GetAccountByReference(string refInput)
         {
-           return dataService.getAccounts();
+           return dataService.getAccountByReference(refInput);
         }
 
         public List<Account> GetAllAccounts()

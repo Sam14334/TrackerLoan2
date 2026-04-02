@@ -53,7 +53,7 @@ namespace TrackerLoan2
 
                     string refInput = getRefInput();
 
-                    Account account = appService.GetAccounts().FirstOrDefault(a => a.accountReference == refInput);// if input matches any accountReference in dummyAccounts, it will return the first match, otherwise its null.
+                    Account account = appService.GetAccountByReference(refInput);// if input matches any accountReference in dummyAccounts, it will return the first match, otherwise its null.
                    
 
                     LoanResult result = appService.ProcessAccount(account);
@@ -121,7 +121,7 @@ namespace TrackerLoan2
                 {
                     string changeRefInput = getChangeRefInput();
 
-                    Account account = appService.GetAccounts().FirstOrDefault(a => a.accountReference == changeRefInput);
+                    Account account = appService.GetAccountByReference(changeRefInput);
                     //account is a reference to the account in the list, any changes to reference update the original
                     //points to the memory location of the account in list
                     if (account == null)
@@ -173,7 +173,7 @@ namespace TrackerLoan2
                 else if(menuOption == 5)
                 {
                     string deleteReferenceInput = getDeleteRefInput();
-                    Account account = appService.GetAccounts().FirstOrDefault(a => a.accountReference == deleteReferenceInput);
+                    Account account = appService.GetAccountByReference(deleteReferenceInput);
 
                     if (appService.DeleteAccount(account))
                     {

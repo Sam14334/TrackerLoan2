@@ -82,6 +82,16 @@ namespace DataService
             addAccount(notDueAcc);
             addAccount(edgeAcc);
         }
+        public List<Account> getAccounts()
+        {
+            return dummyAccounts; 
+        }
+
+        public Account getAccountByReference(string reference)
+        {
+            return getAccounts().FirstOrDefault(a => a.accountReference == reference);
+        }
+
         public bool addAccount(Account account)
         {
              
@@ -94,10 +104,6 @@ namespace DataService
             return true;
         }
 
-        public List<Account> getAccounts()
-        {
-            return dummyAccounts; 
-        }
          
         public bool resetAccounts()
         { 

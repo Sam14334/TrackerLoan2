@@ -14,6 +14,7 @@ namespace DataService
     {
         void populate();
         List<Account> getAccounts();
+        Account getAccountByReference(string reference);
         bool addAccount(Account account); 
         bool resetAccounts(); 
         bool updateAccount(Account account, Account newAccount); 

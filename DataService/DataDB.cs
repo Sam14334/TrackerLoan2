@@ -109,6 +109,43 @@ namespace DataService
             
         }
          
+        public List<Account> getAccounts()
+        {
+            string selectStatement = "SELECT accountReference,duration,daysPassed,interestRate,penaltyRate,amount FROM Accounts";
+            SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
+            if (sqlConnection.State == System.Data.ConnectionState.Closed)
+            {
+                sqlConnection.Open();
+            }
+
+            SqlDataReader reader = selectCommand.ExecuteReader();
+
+            List<Account> accounts = new List<Account>();
+
+            while (reader.Read())
+            {
+
+                Account account = new Account();
+                account.accountReference = reader["accountReference"].ToString();
+                account.duration = Convert.ToInt32(reader["duration"]);
+                account.daysPassed = Convert.ToInt32(reader["daysPassed"]);
+                account.interestRate = Convert.ToInt32(reader["interestRate"]);
+                account.penaltyRate = Convert.ToInt32(reader["penaltyRate"]);
+                account.amount = Convert.ToDouble(reader["amount"]);
+
+
+                accounts.Add(account);
+            }
+            reader.Close();
+            sqlConnection.Close();
+            return accounts;
+        }
+
+        public Account getAccountByReference(string reference)
+        {
+            return getAccounts().FirstOrDefault(a => a.accountReference == reference);
+        }
+
         public bool addAccount(Account account)
         { 
             if (getAccounts().FirstOrDefault(a => a.accountReference == account.accountReference) != null)
@@ -142,37 +179,6 @@ namespace DataService
         }
 
 
-        public List<Account> getAccounts()
-        {
-            string selectStatement = "SELECT accountReference,duration,daysPassed,interestRate,penaltyRate,amount FROM Accounts";
-            SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
-            if (sqlConnection.State == System.Data.ConnectionState.Closed)
-            {
-                sqlConnection.Open();
-            }
-
-            SqlDataReader reader = selectCommand.ExecuteReader();
-
-            List<Account> accounts = new List<Account>();
-
-            while (reader.Read())
-            {
-
-                Account account = new Account();
-                account.accountReference = reader["accountReference"].ToString();
-                account.duration = Convert.ToInt32(reader["duration"]);
-                account.daysPassed = Convert.ToInt32(reader["daysPassed"]);
-                account.interestRate = Convert.ToInt32(reader["interestRate"]);
-                account.penaltyRate = Convert.ToInt32(reader["penaltyRate"]);
-                account.amount = Convert.ToDouble(reader["amount"]);
-
-
-                accounts.Add(account);
-            }
-            reader.Close();
-            sqlConnection.Close();
-            return accounts;
-        }
 
         public bool resetAccounts()
         {

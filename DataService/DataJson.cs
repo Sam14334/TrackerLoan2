@@ -100,6 +100,16 @@ namespace DataService
             }
         }
 
+        public List<Account> getAccounts()
+        {
+            RetrieveDataFromJsonFile();
+            return dummyAccounts;
+        }
+
+        public Account getAccountByReference(string reference)
+        {
+            return getAccounts().FirstOrDefault(a => a.accountReference == reference);
+        }
 
         public bool addAccount(Account account)
         { 
@@ -117,11 +127,6 @@ namespace DataService
             
         }
 
-        public List<Account> getAccounts()
-        {
-            RetrieveDataFromJsonFile();
-            return dummyAccounts;
-        }
 
         public bool resetAccounts()
         {
