@@ -113,7 +113,7 @@ namespace TrackerLoan2
                         }
                         else
                         {
-                            Console.WriteLine("\nValues cannot be empty or 0!\n");
+                            Console.WriteLine("\nValues cannot be empty, 0, or negative!\n");
                         }
 
                     }
@@ -181,7 +181,7 @@ namespace TrackerLoan2
                             }
                             else
                             {
-                                Console.WriteLine("\nValues cannot be empty or 0!\n"); 
+                                Console.WriteLine("\nValues cannot be empty, 0, or negative!\n"); 
                             }
                         }
 

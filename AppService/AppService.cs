@@ -29,13 +29,17 @@ namespace AppService
         
         private  double CalculatePenaltyValue(double amount, double penaltyRate, int overdueDays)
         {
-            if (overdueDays <= 0) return 0;
-            return amount * (penaltyRate / 100.0) * overdueDays;
+            if (overdueDays <= 0)
+                return 0;
+
+            int penaltyCount = (overdueDays - 1) / 30 + 1;
+
+            return penaltyCount * amount * (penaltyRate / 100.0);
         }
 
-        private double CalculateTotalAmount(double amount, double penaltyValue)
+        private double CalculateTotalAmount(double amount, double penaltyValue, int interestRate)
         {
-            return amount + penaltyValue;
+            return amount + ((interestRate*amount)/100) + penaltyValue;
         }
 
         private int CalculateOverdueDays (int daysPassed, int duration)
@@ -70,7 +74,7 @@ namespace AppService
                 result.PenaltyValue = 0;
             }
 
-            result.TotalAmount = CalculateTotalAmount(account.amount, result.PenaltyValue);
+            result.TotalAmount = CalculateTotalAmount(account.amount, result.PenaltyValue, account.interestRate);
 
             if (account.daysPassed >= (account.duration - 5) && account.daysPassed < account.duration)
                 result.StatusMessage = "Your loan is almost due";
@@ -98,7 +102,8 @@ namespace AppService
         public bool RegisterAccount(Account account)
         { 
 
-            if(account.amount==0|| account.duration == 0 || account.daysPassed == 0 || string.IsNullOrEmpty(account.accountReference))
+            if(account.amount <= 0 || account.duration <= 0 || account.daysPassed <= 0 ||account.penaltyRate <= 0 ||account.interestRate <= 0 || 
+                string.IsNullOrEmpty(account.accountReference)|| string.IsNullOrWhiteSpace(account.accountReference))
             {
                 return false;
             }
@@ -112,7 +117,8 @@ namespace AppService
        
         public bool UpdateAccount(Account account, Account newAccount)
         {
-            if (newAccount.amount == 0 || newAccount.duration == 0 || newAccount.daysPassed == 0 || string.IsNullOrEmpty(account.accountReference))
+            if (newAccount.amount <= 0 || newAccount.duration <= 0 || newAccount.daysPassed <= 0 ||account.penaltyRate <= 0 || account.interestRate <= 0 ||
+                string.IsNullOrEmpty(newAccount.accountReference)||string.IsNullOrWhiteSpace(account.accountReference))
             {
                 return false;
             }

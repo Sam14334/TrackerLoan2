@@ -101,8 +101,7 @@ namespace DataService
         }
 
         public List<Account> getAccounts()
-        {
-            RetrieveDataFromJsonFile();
+        { 
             return dummyAccounts;
         }
 
