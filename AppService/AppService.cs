@@ -12,8 +12,12 @@ namespace AppService
         }
         public AppService (short dataOption)
         {
-            
-            if (dataOption == 2)
+
+            if (dataOption == 1)
+            {
+                return;
+            }
+            else if (dataOption == 2)
             {
                 dataService = new DataJson();
             }
