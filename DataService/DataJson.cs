@@ -171,7 +171,11 @@ namespace DataService
 
         private void RetrieveDataFromJsonFile()
         {
-
+            if (!File.Exists(_jsonFileName))
+            {
+                dummyAccounts = new List<Account>();
+                return;
+            }
             using (var jsonFileReader = File.OpenText(this._jsonFileName))
             {
                 this.dummyAccounts = JsonSerializer.Deserialize<List<Account>>
