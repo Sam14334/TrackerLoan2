@@ -1,24 +1,53 @@
 ﻿using System.Security.Principal;
 using Models;
+using DataService;
 namespace AppService
 {
     public class AppService
     {
-        public  double CalculatePenaltyValue(double amount, double penaltyRate, int overdueDays)
+        IDataService dataService = new DataService.DataService();
+        public AppService()
         {
-            if (overdueDays <= 0) return 0;
-            return amount * (penaltyRate / 100.0) * overdueDays;
+
+        }
+        public AppService (short dataOption)
+        {
+            
+            if (dataOption == 2)
+            {
+                dataService = new DataJson();
+            }
+            else if (dataOption == 3)
+            {
+                dataService = new DataDB();
+            }
+            else if (dataOption == 4)
+            {
+                Environment.Exit(0);
+            }
+        }
+        
+        private  double CalculatePenaltyValue(double amount, double penaltyRate, int overdueDays)
+        {
+            if (overdueDays <= 0)
+                return 0;
+
+            int penaltyCount = (overdueDays - 1) / 30 + 1;
+
+            return penaltyCount * amount * (penaltyRate / 100.0);
         }
 
-        public  double CalculateTotalAmount(double amount, double penaltyValue)
+        private double CalculateTotalAmount(double amount, double penaltyValue, int interestRate)
         {
-            return amount + penaltyValue;
+            return amount + ((interestRate*amount)/100) + penaltyValue;
         }
 
-        public int CalculateOverdueDays (int daysPassed, int duration)
+        private int CalculateOverdueDays (int daysPassed, int duration)
         {
             return daysPassed - duration;
         }
+
+
 
         public LoanResult ProcessAccount(Account account)
         {
@@ -45,7 +74,7 @@ namespace AppService
                 result.PenaltyValue = 0;
             }
 
-                result.TotalAmount = CalculateTotalAmount(account.amount, result.PenaltyValue);
+            result.TotalAmount = CalculateTotalAmount(account.amount, result.PenaltyValue, account.interestRate);
 
             if (account.daysPassed >= (account.duration - 5) && account.daysPassed < account.duration)
                 result.StatusMessage = "Your loan is almost due";
@@ -59,5 +88,52 @@ namespace AppService
             return result;
         }
 
+        public Account GetAccountByReference(string refInput)
+        {
+           return dataService.getAccountByReference(refInput);
+        }
+
+        public List<Account> GetAllAccounts()
+        {
+            
+            return dataService.getAccounts();
+
+        }
+        public bool RegisterAccount(Account account)
+        { 
+
+            if(account.amount <= 0 || account.duration <= 0 || account.daysPassed <= 0 ||account.penaltyRate <= 0 ||account.interestRate <= 0 || 
+                string.IsNullOrEmpty(account.accountReference)|| string.IsNullOrWhiteSpace(account.accountReference))
+            {
+                return false;
+            }
+            return dataService.addAccount(account); 
+
+        } 
+        public bool ResetAccounts()
+        {
+           return dataService.resetAccounts();
+        }
+       
+        public bool UpdateAccount(Account account, Account newAccount)
+        {
+            if (newAccount.amount <= 0 || newAccount.duration <= 0 || newAccount.daysPassed <= 0 ||account.penaltyRate <= 0 || account.interestRate <= 0 ||
+                string.IsNullOrEmpty(newAccount.accountReference)||string.IsNullOrWhiteSpace(account.accountReference))
+            {
+                return false;
+            }
+            return dataService.updateAccount(account, newAccount);
+             
+        }
+
+        public bool DeleteAccount(Account account)
+        {
+            if(account == null)
+            {
+                return false;
+            }
+            return dataService.deleteAccount(account);
+        }
+         
     }
 }

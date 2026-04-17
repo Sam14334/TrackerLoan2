@@ -13,8 +13,11 @@ namespace DataService
     public interface IDataService
     {
         void populate();
-        bool addAccount(Account account);
-
         List<Account> getAccounts();
+        Account getAccountByReference(string reference);
+        bool addAccount(Account account); 
+        bool resetAccounts(); 
+        bool updateAccount(Account account, Account newAccount); 
+        bool deleteAccount(Account account);
     }
 }

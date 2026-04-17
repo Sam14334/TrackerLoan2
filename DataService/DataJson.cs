@@ -15,8 +15,7 @@ namespace DataService
 
         private string _jsonFileName;
         public DataJson()
-        {
-            Console.WriteLine("Json Data Method");
+        { 
             _jsonFileName = $"{AppDomain.CurrentDomain.BaseDirectory}/Accounts.json";
 
             populate();
@@ -101,9 +100,67 @@ namespace DataService
             }
         }
 
+        public List<Account> getAccounts()
+        { 
+            return dummyAccounts;
+        }
+
+        public Account getAccountByReference(string reference)
+        {
+            return getAccounts().FirstOrDefault(a => a.accountReference == reference);
+        }
+
+        public bool addAccount(Account account)
+        { 
+
+            if (getAccounts().FirstOrDefault(a => a.accountReference == account.accountReference)!= null)
+            {
+                
+                return false;
+            }
+            //int overdueDays = account.daysPassed - account.duration;
+
+            dummyAccounts.Add(account);
+            SaveDataToJsonFile();
+            return true;
+            
+        }
+
+
+        public bool resetAccounts()
+        {
+            dummyAccounts.Clear();
+            SaveDataToJsonFile();
+
+            populate();           
+
+            return true;
+            
+        }
+
+        public bool updateAccount(Account account, Account newAccount)
+        {
+            account.accountReference = newAccount.accountReference;
+            account.amount = newAccount.amount;
+            account.daysPassed = newAccount.daysPassed;
+            account.duration = newAccount.duration;
+            account.interestRate = newAccount.interestRate;
+            account.penaltyRate = newAccount.penaltyRate;
+            SaveDataToJsonFile();
+            return true;
+        }
+
+        public bool deleteAccount(Account account)
+        {
+            dummyAccounts.Remove(account);
+            SaveDataToJsonFile();
+            return true;
+        }
+
+
         private void SaveDataToJsonFile()
         {
-            using (var outputStream = File.OpenWrite(_jsonFileName))
+            using (var outputStream = File.Create(_jsonFileName))
             {
                 JsonSerializer.Serialize<List<Account>>(
                     new Utf8JsonWriter(outputStream, new JsonWriterOptions
@@ -114,7 +171,11 @@ namespace DataService
 
         private void RetrieveDataFromJsonFile()
         {
-
+            if (!File.Exists(_jsonFileName))
+            {
+                dummyAccounts = new List<Account>();
+                return;
+            }
             using (var jsonFileReader = File.OpenText(this._jsonFileName))
             {
                 this.dummyAccounts = JsonSerializer.Deserialize<List<Account>>
@@ -122,35 +183,6 @@ namespace DataService
                     { PropertyNameCaseInsensitive = true })
                     .ToList();
             }
-        }
-
-        public bool addAccount(Account account)
-        {
-            AppService.AppService appService = new AppService.AppService();
-
-
-            if (account != null )
-            {
-                int overdueDays = account.daysPassed - account.duration;
-                 
-                double penaltyValue = appService.CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
-                 
-                account.amountToBePaid = appService.CalculateTotalAmount(account.amount, penaltyValue);
-
-                dummyAccounts.Add(account);
-                SaveDataToJsonFile();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public List<Account> getAccounts()
-        {
-            SaveDataToJsonFile();
-            return dummyAccounts;
         }
     }
 }

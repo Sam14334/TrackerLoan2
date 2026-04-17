@@ -21,7 +21,7 @@ namespace DataService
                 duration = 30,
                 amount = 1000,
                 interestRate = 10,
-                penaltyRate = 5,
+                penaltyRate = 5, 
             };
 
             Account almostDueAcc = new Account
@@ -82,23 +82,54 @@ namespace DataService
             addAccount(notDueAcc);
             addAccount(edgeAcc);
         }
+        public List<Account> getAccounts()
+        {
+            return dummyAccounts; 
+        }
+
+        public Account getAccountByReference(string reference)
+        {
+            return getAccounts().FirstOrDefault(a => a.accountReference == reference);
+        }
+
         public bool addAccount(Account account)
         {
-            AppService.AppService appService = new AppService.AppService();
-
-            int overdueDays = account.daysPassed - account.duration;
-            double penaltyValue = appService.CalculatePenaltyValue(account.amount, account.penaltyRate, overdueDays);
-            account.amountToBePaid = appService.CalculateTotalAmount(account.amount, penaltyValue);
+             
+            if (getAccounts().FirstOrDefault(a => a.accountReference == account.accountReference)!=null)
+            {
+                return false;
+            }
 
             dummyAccounts.Add(account);
             return true;
         }
 
-        public List<Account> getAccounts()
-        {
-            return dummyAccounts;
+         
+        public bool resetAccounts()
+        { 
+            dummyAccounts.Clear();
+            populate();
+            return true;
+             
         }
 
-        
+        public bool updateAccount(Account account, Account newAccount)
+        {
+             
+            account.accountReference = newAccount.accountReference;
+            account.amount = newAccount.amount;
+            account.daysPassed = newAccount.daysPassed;
+            account.duration = newAccount.duration;
+            account.interestRate = newAccount.interestRate;
+            account.penaltyRate = newAccount.penaltyRate;
+            return true;
+              
+        }
+
+        public bool deleteAccount(Account account)
+        {
+            dummyAccounts.Remove(account);
+            return true;
+        }
     }
 }
