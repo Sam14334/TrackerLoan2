@@ -19,9 +19,9 @@ namespace AppService
             }
             else if (dataOption == 3)
             {
-                dataService = new DataDB();
+                dataService = new DataDB();  
             }
-            else if (dataOption == 4)
+            else 
             {
                 Environment.Exit(0);
             }
@@ -102,7 +102,7 @@ namespace AppService
         public bool RegisterAccount(Account account)
         { 
 
-            if(account.amount <= 0 || account.duration <= 0 || account.daysPassed <= 0 ||account.penaltyRate <= 0 ||account.interestRate <= 0 || 
+            if(account.amount <= 0 || account.duration <= 0 || account.daysPassed < 0 ||account.penaltyRate <= 0 ||account.interestRate <= 0 || 
                 string.IsNullOrEmpty(account.accountReference)|| string.IsNullOrWhiteSpace(account.accountReference))
             {
                 return false;
@@ -117,7 +117,7 @@ namespace AppService
        
         public bool UpdateAccount(Account account, Account newAccount)
         {
-            if (newAccount.amount <= 0 || newAccount.duration <= 0 || newAccount.daysPassed <= 0 ||account.penaltyRate <= 0 || account.interestRate <= 0 ||
+            if (newAccount.amount <= 0 || newAccount.duration <= 0 || newAccount.daysPassed < 0 ||newAccount.penaltyRate <= 0 || newAccount.interestRate <= 0 ||
                 string.IsNullOrEmpty(newAccount.accountReference)||string.IsNullOrWhiteSpace(account.accountReference))
             {
                 return false;
