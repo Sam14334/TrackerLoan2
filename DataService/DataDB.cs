@@ -143,7 +143,7 @@ namespace DataService
 
         public Account getAccountByReference(string reference)
         {
-            return getAccounts().FirstOrDefault(a => a.accountReference == reference);
+            return getAccounts().FirstOrDefault(a => a.accountReference.Trim() == reference.Trim());
         }
 
         public bool addAccount(Account account)

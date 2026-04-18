@@ -117,6 +117,7 @@ namespace AppService
         public bool ResetAccounts()
         {
            return dataService.resetAccounts();
+            //Note: this resets the accounts with its default accounts
         }
        
         public bool UpdateAccount(Account account, Account newAccount)
