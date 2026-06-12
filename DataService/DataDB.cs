@@ -12,7 +12,7 @@ namespace DataService
 {
     public class DataDB : IDataService
     {
-        private string connectionString = "Data Source=localhost\\SQLEXPRESS02;Initial Catalog=LoanTracker;Integrated Security=True;TrustServerCertificate=True;";
+        private string connectionString = "Data Source=localhost\\SQLEXPRESS01;Initial Catalog=LoanTracker;Integrated Security=True;TrustServerCertificate=True;";
 
         private SqlConnection sqlConnection;
 
