@@ -19,20 +19,20 @@ namespace TrackerLoan2
             //IDataService dataService = new DataDB();
             //IDataService dataService = new DataService.DataService(); //in-memory data saving
 
-            try
-            {
+            //try
+            //{
 
-                short dataOption;
-                Console.WriteLine("============= Data Saving =============");
-                Console.WriteLine("Select a number for your desired data saving method");
-                Console.WriteLine("[1] In-memory");
-                Console.WriteLine("[2] Json file");
-                Console.WriteLine("[3] Sql table");
-                Console.WriteLine("[4] Exit\n");
-                dataOption = Convert.ToInt16(Console.ReadLine());
-
-                AppService.AppService appService = new AppService.AppService(dataOption);
-
+                //short dataOption;
+                //Console.WriteLine("============= Data Saving =============");
+                //Console.WriteLine("Select a number for your desired data saving method");
+                //Console.WriteLine("[1] In-memory");
+                //Console.WriteLine("[2] Json file");
+                //Console.WriteLine("[3] Sql table");
+                //Console.WriteLine("[4] Exit\n");
+                //dataOption = Convert.ToInt16(Console.ReadLine());
+                //passing the option to constructor
+                //AppService.AppService appService = new AppService.AppService(dataOption);
+                AppService.AppService appService = new AppService.AppService();
 
                 short menuOption;
                 do
@@ -214,23 +214,23 @@ namespace TrackerLoan2
                         Console.WriteLine("\nInvalid number option!\n");
                     }
                 } while (menuOption != 7);
-            }catch(FormatException)
-            {
-                Console.WriteLine("\nInvalid input format. Please try numbers only!\n");
-            }catch(OverflowException)
-            {
-                Console.WriteLine("\nNumber input value is too large or too small!\n");
-            }catch(SqlException)
-            {
-                Console.WriteLine("\nSQL Database Connection error occurred.\n");
-            }catch(IOException)
-            {
-                Console.WriteLine("\nJson Database file error.\n");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Unexpected error: {e.Message}\n");
-            }  
+            //}catch(FormatException)
+            //{
+            //    Console.WriteLine("\nInvalid input format. Please try numbers only!\n");
+            //}catch(OverflowException)
+            //{
+            //    Console.WriteLine("\nNumber input value is too large or too small!\n");
+            //}catch(SqlException)
+            //{
+            //    Console.WriteLine("\nSQL Database Connection error occurred.\n");
+            //}catch(IOException)
+            //{
+            //    Console.WriteLine("\nJson Database file error.\n");
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine($"Unexpected error: {e.Message}\n");
+            //}  
         }
          
         static void displayLoanInfo(Account account,string status, double penaltyValue, double totalAmount)

@@ -5,31 +5,33 @@ namespace AppService
 {
     public class AppService
     {
-        IDataService dataService = new DataService.DataService();
-        public AppService()
-        {
+        IDataService dataService = new DataDB();
+        //public AppService()
+        //{
 
-        }
-        public AppService (short dataOption)
-        {
+        //}
 
-            if (dataOption == 1)
-            {
-                return;
-            }
-            else if (dataOption == 2)
-            {
-                dataService = new DataJson();
-            }
-            else if (dataOption == 3)
-            {
-                dataService = new DataDB();  
-            }
-            else 
-            {
-                Environment.Exit(0);
-            }
-        }
+        //Should've been for choosing which data storing method
+        //public AppService (short dataOption)
+        //{
+
+        //    if (dataOption == 1)
+        //    {
+        //        return;
+        //    }
+        //    else if (dataOption == 2)
+        //    {
+        //        dataService = new DataJson();
+        //    }
+        //    else if (dataOption == 3)
+        //    {
+        //        dataService = new DataDB();  
+        //    }
+        //    else 
+        //    {
+        //        Environment.Exit(0);
+        //    }
+        //}
         
         private  double CalculatePenaltyValue(double amount, double penaltyRate, int overdueDays)
         {
