@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36930.0 d17.14
+VisualStudioVersion = 17.14.36930.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerLoan3", "TrackerLoan3.csproj", "{055A3F22-490A-4319-8052-095DDD04AD8C}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppService", "AppService\AppService.csproj", "{8A485178-E494-4D9E-8766-01CEB97CFAD1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{9312DC5D-3710-4A7A-84B5-84BDD680F07B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerLoanAPI", "TrackerLoanAPI\TrackerLoanAPI.csproj", "{7D6C23B7-BB00-372B-7B89-F1ABC81A925F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{9312DC5D-3710-4A7A-84B5-84BDD680F07B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9312DC5D-3710-4A7A-84B5-84BDD680F07B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9312DC5D-3710-4A7A-84B5-84BDD680F07B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D6C23B7-BB00-372B-7B89-F1ABC81A925F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D6C23B7-BB00-372B-7B89-F1ABC81A925F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D6C23B7-BB00-372B-7B89-F1ABC81A925F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D6C23B7-BB00-372B-7B89-F1ABC81A925F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

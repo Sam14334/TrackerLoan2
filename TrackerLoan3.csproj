@@ -10,6 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TrackerLoanAPI\**" />
+    <EmbeddedResource Remove="TrackerLoanAPI\**" />
+    <None Remove="TrackerLoanAPI\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="AppService\AppService.csproj" />
     <ProjectReference Include="DataService\DataService.csproj" />
   </ItemGroup>
