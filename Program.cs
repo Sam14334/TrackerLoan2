@@ -1,4 +1,4 @@
-﻿using AppService; 
+using AppService; 
 using DataService;
 using Microsoft.Data.SqlClient;
 using Models;
@@ -10,9 +10,12 @@ namespace TrackerLoan2
 {
     internal class Program
     {
+
         static void Main(string[] args)
         {
+ 
             //Loan Tracking system for an Online banking app, with loan notification and penalties
+            // Test comment: local edit test
 
             //Interface     name            class that implements interface
             //IDataService dataService = new DataJson(); //json data saving
