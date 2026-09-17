@@ -1,4 +1,4 @@
-﻿using System.Security.Principal;
+using System.Security.Principal;
 using Models;
 using DataService;
 namespace AppService
@@ -6,10 +6,21 @@ namespace AppService
     public class AppService
     {
         IDataService dataService = new DataDB();
-        //public AppService()
-        //{
+        private readonly EmailService? emailService;
 
-        //}
+        public AppService()
+        {
+        }
+
+        public AppService(EmailService emailService)
+        {
+            this.emailService = emailService;
+        }
+
+        public void SendEmailNotification(string accountNumber, string recipientEmail = "borrower@example.com")
+        {
+            emailService?.SendEmail(accountNumber, recipientEmail);
+        }
 
         //Should've been for choosing which data storing method
         //public AppService (short dataOption)
@@ -91,6 +102,18 @@ namespace AppService
             else
                 result.StatusMessage = "Your loan is not due yet.";
 
+            if (emailService != null)
+            {
+                try
+                {
+                    emailService.SendEmail(account.accountReference, "borrower@example.com");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[Email Notice]: Could not send email: {ex.Message}");
+                }
+            }
+
             return result;
         }
 
@@ -113,8 +136,19 @@ namespace AppService
             {
                 return false;
             }
-            return dataService.addAccount(account); 
-
+            bool added = dataService.addAccount(account); 
+            if (added && emailService != null)
+            {
+                try
+                {
+                    emailService.SendEmail(account.accountReference, "borrower@example.com");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[Email Notice]: Could not send email: {ex.Message}");
+                }
+            }
+            return added;
         } 
         public bool ResetAccounts()
         {

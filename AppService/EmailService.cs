@@ -26,7 +26,7 @@ namespace AppService
             message.Body = new TextPart("plain")
             {
                 Text = $"Account {accountNumber}\n\n" +
-                       "A transaction was made to your account\n\n"
+                       "Your account was processed\n\n"
             };
 
             using (var client = new SmtpClient())

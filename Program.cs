@@ -1,6 +1,7 @@
 using AppService; 
 using DataService;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using Models;
 using System;
 using System.Linq;
@@ -38,7 +39,13 @@ namespace TrackerLoan2
                 
                 try
                 {
-                    AppService.AppService appService = new AppService.AppService();
+                    IConfiguration configuration = new ConfigurationBuilder()
+                        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .Build();
+
+                    EmailService emailService = new EmailService(configuration);
+                    AppService.AppService appService = new AppService.AppService(emailService);
                     short menuOption;
                     do
                     {
