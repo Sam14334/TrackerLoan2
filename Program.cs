@@ -39,13 +39,16 @@ namespace TrackerLoan2
                 
                 try
                 {
-                    IConfiguration configuration = new ConfigurationBuilder()
-                        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                        .Build();
+                    //Disabled email service
+                    //IConfiguration configuration = new ConfigurationBuilder()
+                    //    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    //    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    //    .Build();
 
-                    EmailService emailService = new EmailService(configuration);
-                    AppService.AppService appService = new AppService.AppService(emailService);
+                    //EmailService emailService = new EmailService(configuration);
+                    //AppService.AppService appService = new AppService.AppService(emailService);
+
+                    AppService.AppService appService = new AppService.AppService(); 
                     short menuOption;
                     do
                     {
@@ -87,6 +90,7 @@ namespace TrackerLoan2
                             string accountReference;
                             int daysPassed, duration, interestRate, penaltyRate;
                             double amount;
+                            int newDuration = 0;
 
                             Console.WriteLine("============= Add Account =============");
                             Console.Write("Reference ID: ");
@@ -102,8 +106,24 @@ namespace TrackerLoan2
                             Console.Write("Penalty Rate (percentage): ");
                             penaltyRate = int.Parse(Console.ReadLine());
 
+                            //DateTime input
+                            Console.WriteLine("Select loan term: ");
+                            Console.WriteLine("[1] 15 Days (Payday Loan)");
+                            Console.WriteLine("[2] 30 Days (1 Month)");
+                            Console.WriteLine("[3] 60 Days (2 Months)");
 
-                            Account newAccount = new Account
+                            switch (Console.ReadLine())
+                            {
+                                case "1":newDuration=15 ; break;
+                                case "2": newDuration = 30; break;
+                                case "3": newDuration = 60; break;
+                                default: Console.WriteLine("Invalid selection! Please choose 1, 2, or 3.\n"); break;
+
+                            }
+                            
+
+
+                        Account newAccount = new Account
                             {
                                 accountReference = accountReference,
                                 amount = amount,
@@ -111,6 +131,7 @@ namespace TrackerLoan2
                                 duration = duration,
                                 interestRate = interestRate,
                                 penaltyRate = penaltyRate,
+                                newDuration = newDuration
                             };
 
                             Account account = appService.GetAccountByReference(accountReference);

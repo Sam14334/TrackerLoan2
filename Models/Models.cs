@@ -8,6 +8,11 @@
         public int interestRate { get; set; }
         public int penaltyRate { get; set; }
         public double amount { get; set; } 
+        public int newDuration { get; set; }
+        public DateTime startDate { get; set; }
+        public DateTime dueDate { get; set; }
+
+
     }
 
     public class LoanResult

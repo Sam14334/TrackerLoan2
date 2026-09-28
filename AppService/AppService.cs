@@ -1,6 +1,7 @@
 using System.Security.Principal;
 using Models;
 using DataService;
+using Microsoft.VisualBasic;
 namespace AppService
 {
     public class AppService
@@ -64,18 +65,28 @@ namespace AppService
             return daysPassed - duration;
         }
 
+        private DateTime InitializeStartDate()
+        {
+            return DateTime.Today;
+        }
+
+        private DateTime CalculateDueDate(DateTime startDate,int newDuration)
+        {
+            return startDate.AddDays(newDuration);
+        }
+
 
 
         public LoanResult ProcessAccount(Account account)
         {
             LoanResult result = new LoanResult();
-
             if (account == null)
             {
                 result.StatusMessage = "Invalid Reference. Please try again.";
                 return result;
             }
 
+           
             result.Account = account;
 
             int overdueDays = CalculateOverdueDays(account.daysPassed, account.duration);
@@ -130,12 +141,24 @@ namespace AppService
         }
         public bool RegisterAccount(Account account)
         { 
+            //newDuration Validation
+            if(account.newDuration !=15 && account.newDuration != 30&& account.newDuration != 60)
+            {
+                return false;
+            }
 
-            if(account.amount <= 0 || account.duration <= 0 || account.daysPassed < 0 ||account.penaltyRate <= 0 ||account.interestRate <= 0 || 
+            if (account.amount <= 0 || account.duration <= 0 || account.daysPassed < 0 ||account.penaltyRate <= 0 ||account.interestRate <= 0 || 
                 string.IsNullOrEmpty(account.accountReference)|| string.IsNullOrWhiteSpace(account.accountReference))
             {
                 return false;
             }
+
+            //create DateTime startDate and DueDate
+            account.startDate = InitializeStartDate();
+            account.dueDate = CalculateDueDate(account.startDate, account.newDuration);
+
+            Console.WriteLine(account.startDate.ToString() + " - " + account.dueDate.ToString());
+
             bool added = dataService.addAccount(account); 
             if (added && emailService != null)
             {
