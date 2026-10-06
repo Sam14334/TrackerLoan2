@@ -14,9 +14,8 @@ namespace TrackerLoan2
 
         static void Main(string[] args)
         {
- 
+         
             //Loan Tracking system for an Online banking app, with loan notification and penalties
-            // Test comment: local edit test
 
             //Interface     name            class that implements interface
             //IDataService dataService = new DataJson(); //json data saving
@@ -26,18 +25,18 @@ namespace TrackerLoan2
             //try
             //{
 
-                //short dataOption;
-                //Console.WriteLine("============= Data Saving =============");
-                //Console.WriteLine("Select a number for your desired data saving method");
-                //Console.WriteLine("[1] In-memory");
-                //Console.WriteLine("[2] Json file");
-                //Console.WriteLine("[3] Sql table");
-                //Console.WriteLine("[4] Exit\n");
-                //dataOption = Convert.ToInt16(Console.ReadLine());
-                //passing the option to constructor
-                //AppService.AppService appService = new AppService.AppService(dataOption);
-                
-                try
+            //short dataOption;
+            //Console.WriteLine("============= Data Saving =============");
+            //Console.WriteLine("Select a number for your desired data saving method");
+            //Console.WriteLine("[1] In-memory");
+            //Console.WriteLine("[2] Json file");
+            //Console.WriteLine("[3] Sql table");
+            //Console.WriteLine("[4] Exit\n");
+            //dataOption = Convert.ToInt16(Console.ReadLine());
+            //passing the option to constructor
+            //AppService.AppService appService = new AppService.AppService(dataOption);
+
+            try
                 {
                     //Disabled email service
                     //IConfiguration configuration = new ConfigurationBuilder()

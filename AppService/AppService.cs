@@ -157,6 +157,7 @@ namespace AppService
             account.startDate = InitializeStartDate();
             account.dueDate = CalculateDueDate(account.startDate, account.newDuration);
 
+            //just shows the startdate and duedate
             Console.WriteLine(account.startDate.ToString() + " - " + account.dueDate.ToString());
 
             bool added = dataService.addAccount(account); 

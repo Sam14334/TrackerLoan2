@@ -43,6 +43,9 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
+                    newDuration = 30,
+                    startDate = DateTime.Today.AddDays(-31),
+                    dueDate = DateTime.Today.AddDays(-1) 
                 };
 
                 Account almostDueAcc = new Account
@@ -53,6 +56,9 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
+                    newDuration = 30,
+                    startDate = DateTime.Today.AddDays(-26),
+                    dueDate = DateTime.Today.AddDays(4) 
                 };
 
                 Account dueTodayAcc = new Account
@@ -63,6 +69,9 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
+                    newDuration = 30,
+                    startDate = DateTime.Today.AddDays(-30),
+                    dueDate = DateTime.Today 
                 };
 
                 Account overdueAcc = new Account
@@ -73,6 +82,9 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
+                    newDuration = 30,
+                    startDate = DateTime.Today.AddDays(-35),
+                    dueDate = DateTime.Today.AddDays(-5) 
                 };
 
                 Account notDueAcc = new Account
@@ -83,6 +95,9 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
+                    newDuration = 30,
+                    startDate = DateTime.Today.AddDays(-10),
+                    dueDate = DateTime.Today.AddDays(20) 
                 };
 
                 Account edgeAcc = new Account
@@ -93,6 +108,9 @@ namespace DataService
                     amount = 1000,
                     interestRate = 10,
                     penaltyRate = 5,
+                    newDuration = 30,
+                    startDate = DateTime.Today.AddDays(-25),
+                    dueDate = DateTime.Today.AddDays(5) 
                 };
 
 
@@ -155,10 +173,19 @@ namespace DataService
             } 
             int overdueDays = account.daysPassed - account.duration;
 
+            //New container for datetime overdue days
+            int newOverdueDays = (DateTime.Today.Subtract(account.dueDate)).Days;
+
+            Console.WriteLine("newOverdueDays : "+newOverdueDays);
+
             string insertStatement =
             "INSERT INTO Accounts VALUES(@accountReference, @duration,@daysPassed, @interestRate, @penaltyRate, @amount)";
 
-            SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
+            //New insertStatement (already in-use)
+            string newInsertStatement =
+           "INSERT INTO Accounts VALUES(@accountReference, @duration,@daysPassed, @interestRate, @penaltyRate, @amount, @newDuration, @startDate, @dueDate)";
+
+            SqlCommand insertCommand = new SqlCommand(newInsertStatement, sqlConnection);
 
             if (sqlConnection.State == System.Data.ConnectionState.Closed)
             {
@@ -170,6 +197,10 @@ namespace DataService
             insertCommand.Parameters.AddWithValue("@daysPassed", account.daysPassed);
             insertCommand.Parameters.AddWithValue("@interestRate", account.interestRate);
             insertCommand.Parameters.AddWithValue("@penaltyRate", account.penaltyRate);
+            //New Insertcommand for new values in inserstatatement
+            insertCommand.Parameters.AddWithValue("@newDuration", account.newDuration);
+            insertCommand.Parameters.AddWithValue("@startDate", account.startDate);
+            insertCommand.Parameters.AddWithValue("@dueDate", account.dueDate);
             insertCommand.Parameters.Add("@amount", SqlDbType.Decimal).Value = account.amount;
 
             insertCommand.ExecuteNonQuery();
